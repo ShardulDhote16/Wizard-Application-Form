@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wizard Application Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #cceeff, #e6f2ff);
+      margin: 0;
+      padding: 30px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    h2, h3 {
+      color: #003366;
+    }
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .step {
+      flex: 1;
+      padding: 12px;
+      background: #b3d9ff;
+      border: none;
+      margin: 0 5px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #003366;
+      cursor: not-allowed;
+      pointer-events: auto;
+      user-select: none;
+    }
+    .step.active {
+      background: #3399ff;
+      color: white;
+      box-shadow: 0 0 8px rgba(0, 102, 204, 0.5);
+      cursor: pointer;
+    }
+    .form-step {
+      display: none;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .form-step.active {
+      display: block;
+      opacity: 1;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #004466;
+    }
+    .input-wrapper {
+      position: relative;
+    }
+    .input-wrapper input,
+    .input-wrapper select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #f5faff;
+      padding-right: 30px;
+    }
+    .input-wrapper .status-icon {
+      position: absolute;
+      right: 10px;
+      top: 65%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      pointer-events: none;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #4da6ff, #3399ff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(to right, #3399ff, #007acc);
+      transform: scale(1.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #e0f0ff;
+      color: #003366;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    img.preview {
+      max-height: 100px;
+      margin-top: 5px;
+      display: none;
+    }
+    .scrollable-content {
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+    .scrollable-content::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Edge */
+    }
+    .upload-status {
+      font-weight: bold;
+      color: red;
+    }
+    .upload-status.uploaded {
+      color: green;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Application Form</h2>
+    <div class="steps">
+      <button class="step active" type="button">Profile</button>
+      <button class="step" type="button">Academic</button>
+      <button class="step" type="button">Documents</button>
+    </div>
+
+    <form id="wizardForm">
+      <div class="form-step active">
+        <div class="scrollable-content">
+          <h3>Profile Information</h3>
+          <div class="input-wrapper"><input type="text" name="fullname" placeholder="Full Name" required pattern="[A-Za-z\s]+" /><span class="status-icon">❌</span></div>
+          <div class="input-wrapper"><input type="text" name="father" placeholder="Father's Name" required pattern="[A-Za-z\s]+" /><span class="status-icon">❌</span></div>
+          <div class="input-wrapper"><input type="text" name="mother" placeholder="Mother's Name" required pattern="[A-Za-z\s]+" /><span class="status-icon">❌</span></div>
+          <label>Gender:
+            <input type="radio" name="gender" value="male" required /> Male
+            <input type="radio" name="gender" value="female" required /> Female
+          </label>
+          <div class="input-wrapper"><input type="date" name="dob" required /><span class="status-icon">❌</span></div>
+          <div class="input-wrapper"><input type="email" name="email" placeholder="Email" required /><span class="status-icon">❌</span></div>
+          <div class="input-wrapper"><input type="tel" name="mobile" placeholder="Mobile" required pattern="\d{10}" /><span class="status-icon">❌</span></div>
+
+          <h4>Address Details</h4>
+          <table>
+            <tr>
+              <th>Permanent Address</th>
+              <th>Mailing Address</th>
+            </tr>
+            <tr>
+              <td>
+                <div class="input-wrapper"><input type="text" id="perm_house" placeholder="House / Flat No" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="perm_street" placeholder="Street" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="perm_city" placeholder="City / Village" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="perm_district" placeholder="District" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="perm_state" placeholder="State" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="perm_pincode" placeholder="Pin Code" required pattern="\d{4,10}" /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="perm_country" placeholder="Country" required /><span class="status-icon">❌</span></div>
+              </td>
+              <td>
+                <label><input type="checkbox" id="sameAddress" onchange="copyAddress()"> Same as Permanent Address</label>
+                <div class="input-wrapper"><input type="text" id="mail_house" placeholder="House / Flat No" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="mail_street" placeholder="Street" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="mail_city" placeholder="City / Village" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="mail_district" placeholder="District" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="mail_state" placeholder="State" required /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="mail_pincode" placeholder="Pin Code" required pattern="\d{4,10}" /><span class="status-icon">❌</span></div>
+                <div class="input-wrapper"><input type="text" id="mail_country" placeholder="Country" required /><span class="status-icon">❌</span></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <!-- Step 2: Academic -->
+      <div class="form-step">
+        <div class="scrollable-content">
+          <h3>Academic Information</h3>
+          <select name="document" required>
+            <option value="">Select Document</option>
+            <option value="aadhaar">Aadhaar</option>
+            <option value="voter">Voter ID</option>
+            <option value="pan">PAN Card</option>
+          </select>
+          <input type="text" name="docnum" placeholder="Document Number" required />
+          <p>Have you ever been debarred?</p>
+          <input type="radio" name="debar" value="yes" required /> Yes
+          <input type="radio" name="debar" value="no" required /> No
+          <p>Category:</p>
+          <input type="radio" name="cat" value="General" required /> General
+          <input type="radio" name="cat" value="SC" /> SC
+          <input type="radio" name="cat" value="ST" /> ST
+          <input type="radio" name="cat" value="OBC" /> OBC
+          <input type="radio" name="cat" value="Others" /> Others
+          <h4>Previous Examinations Passed</h4>
+          <table>
+            <tr>
+              <th>Level</th>
+              <th>Board/University</th>
+              <th>Program</th>
+              <th>Year of Passing</th>
+              <th>Percentage</th>
+              <th>Division</th>
+            </tr>
+            <tr>
+              <td>10th Std</td>
+              <td><input type="text" name="tenth_board" required /></td>
+              <td><input type="text" name="tenth_program" required /></td>
+              <td><input type="text" name="tenth_year" required /></td>
+              <td><input type="text" name="tenth_percent" required /></td>
+              <td><input type="text" name="tenth_div" required /></td>
+            </tr>
+            <tr>
+              <td>12th Std</td>
+              <td><input type="text" name="twelfth_board" required /></td>
+              <td><input type="text" name="twelfth_program" required /></td>
+              <td><input type="text" name="twelfth_year" required /></td>
+              <td><input type="text" name="twelfth_percent" required /></td>
+              <td><input type="text" name="twelfth_div" required /></td>
+            </tr>
+            <tr>
+              <td>Graduation</td>
+              <td><input type="text" name="grad_board" /></td>
+              <td><input type="text" name="grad_program" /></td>
+              <td><input type="text" name="grad_year" /></td>
+              <td><input type="text" name="grad_percent" /></td>
+              <td><input type="text" name="grad_div" /></td>
+            </tr>
+            <tr>
+              <td>Post Graduation</td>
+              <td><input type="text" name="pg_board" /></td>
+              <td><input type="text" name="pg_program" /></td>
+              <td><input type="text" name="pg_year" /></td>
+              <td><input type="text" name="pg_percent" /></td>
+              <td><input type="text" name="pg_div" /></td>
+            </tr>
+          </table>
+        </div>
+        <button type="button" onclick="prevStep()">Previous</button>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <!-- Step 3: Document Upload -->
+      <div class="form-step">
+        <div class="scrollable-content">
+          <h3>Document Upload</h3>
+          <table>
+            <tr>
+              <th>Document Type</th>
+              <th>File Upload</th>
+              <th>Example / Note</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>Photograph</td>
+              <td><input type="file" name="photo" accept="image/*" required onchange="previewImage(event, 'photoPreview'); updateStatus(this, 'photoStatus')" /><img id="photoPreview" class="preview" /></td>
+              <td>Recent passport size photo (JPEG/PNG)</td>
+              <td class="upload-status" id="photoStatus">Not Uploaded</td>
+            </tr>
+            <tr>
+              <td>Signature</td>
+              <td><input type="file" name="signature" accept="image/*" required onchange="previewImage(event, 'signPreview'); updateStatus(this, 'signStatus')" /><img id="signPreview" class="preview" /></td>
+              <td>Scanned signature in black ink (JPEG/PNG)</td>
+              <td class="upload-status" id="signStatus">Not Uploaded</td>
+            </tr>
+            <tr>
+              <td>ID Proof</td>
+              <td><input type="file" name="idproof" accept="image/*,application/pdf" required onchange="previewImage(event, 'idPreview'); updateStatus(this, 'idStatus')" /><img id="idPreview" class="preview" /></td>
+              <td>Aadhaar / PAN / Voter ID (PDF or image)</td>
+              <td class="upload-status" id="idStatus">Not Uploaded</td>
+            </tr>
+            <tr>
+              <td>Qualification Documents</td>
+              <td><input type="file" name="qualdocs" accept="image/*,application/pdf" required onchange="previewImage(event, 'qualPreview'); updateStatus(this, 'qualStatus')" /><img id="qualPreview" class="preview" /></td>
+              <td>10th, 12th, Degree certificates (PDF or image)</td>
+              <td class="upload-status" id="qualStatus">Not Uploaded</td>
+            </tr>
+          </table>
+          <label style="margin-top: 20px;">Place:
+            <input type="text" name="place" placeholder="e.g., Mumbai" required />
+          </label>
+        </div>
+        <button type="button" onclick="prevStep()">Previous</button>
+        <button type="submit">Finish</button>
+      </div>
+
+      <!-- Step 4: Success -->
+      <div class="form-step">
+        <h3 style="color: green; text-align: center;">Form Submitted Successfully!</h3>
+        <p style="text-align: center;">The form will refresh automatically in 5 seconds.</p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll(".form-step");
+    const stepButtons = document.querySelectorAll(".step");
+
+    // Show step by index and update active classes
+    function showStep(index) {
+      steps.forEach((step, i) => step.classList.toggle("active", i === index));
+      stepButtons.forEach((btn, i) => btn.classList.toggle("active", i === index));
+      currentStep = index;
+      validateIcons();
+    }
+
+    // Next step with validation
+    function nextStep() {
+      if (!checkStepValidity()) return;
+      if (currentStep < steps.length - 2) { // exclude success step
+        showStep(currentStep + 1);
+      }
+    }
+
+    // Previous step
+    function prevStep() {
+      if (currentStep > 0) {
+        showStep(currentStep - 1);
+      }
+    }
+
+    // Preview image for file inputs that are images
+    function previewImage(event, previewId) {
+      const file = event.target.files[0];
+      const preview = document.getElementById(previewId);
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = '';
+        preview.style.display = 'none';
+      }
+    }
+
+    // Update upload status text and style
+    function updateStatus(input, statusId) {
+      const status = document.getElementById(statusId);
+      if (input.files.length > 0) {
+        status.textContent = "Uploaded";
+        status.classList.add("uploaded");
+      } else {
+        status.textContent = "Not Uploaded";
+        status.classList.remove("uploaded");
+      }
+    }
+
+    // Validate all inputs in active step and update icons
+    function validateIcons() {
+      const inputs = steps[currentStep].querySelectorAll("input, select");
+      inputs.forEach(input => {
+        const icon = input.parentElement.querySelector(".status-icon");
+        if (icon) {
+          icon.textContent = input.checkValidity() ? "✅" : "❌";
+          icon.style.color = input.checkValidity() ? "green" : "red";
+        }
+      });
+    }
+
+    // Add live validation on input events
+    function addLiveValidation() {
+      const inputs = document.querySelectorAll("input, select");
+      inputs.forEach(input => {
+        input.addEventListener("input", validateIcons);
+        input.addEventListener("blur", validateIcons);
+      });
+    }
+
+    // Check validity of all inputs/selects in current step
+    function checkStepValidity() {
+      const fields = steps[currentStep].querySelectorAll("input, select");
+      for (let field of fields) {
+        // For radio buttons, check if one in group is selected
+        if (field.type === "radio") {
+          const radioGroup = steps[currentStep].querySelectorAll(`input[name="${field.name}"]`);
+          const checkedOne = Array.from(radioGroup).some(r => r.checked);
+          if (!checkedOne) {
+            field.reportValidity();
+            return false;
+          }
+        } else if (!field.checkValidity()) {
+          field.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Copy permanent address to mailing address when checkbox checked
+    function copyAddress() {
+      const isChecked = document.getElementById("sameAddress").checked;
+      const permFields = [
+        "perm_house", "perm_street", "perm_city", "perm_district",
+        "perm_state", "perm_pincode", "perm_country"
+      ];
+      const mailFields = [
+        "mail_house", "mail_street", "mail_city", "mail_district",
+        "mail_state", "mail_pincode", "mail_country"
+      ];
+
+      for (let i = 0; i < permFields.length; i++) {
+        const permInput = document.getElementById(permFields[i]);
+        const mailInput = document.getElementById(mailFields[i]);
+        if (isChecked) {
+          mailInput.value = permInput.value;
+          mailInput.dispatchEvent(new Event('input'));
+        } else {
+          mailInput.value = "";
+          mailInput.dispatchEvent(new Event('input'));
+        }
+      }
+    }
+
+    // Add click listeners to step buttons for backward navigation only
+    stepButtons.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        if (i <= currentStep) {
+          showStep(i);
+        }
+      });
+    });
+
+    // Form submit handler
+    document.getElementById("wizardForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      if (!checkStepValidity()) return;
+      showStep(steps.length - 1);
+      setTimeout(() => location.reload(), 5000);
+    });
+
+    addLiveValidation();
+    validateIcons(); // initialize icons on page load
+  </script>
+</body>
+</html>
